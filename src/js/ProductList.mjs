@@ -20,11 +20,8 @@ export default class ProductList {
     this.listElement = listElement;
   }
 
-  async init(productIds) {
-    let list = await this.dataSource.getData();
-    if (productIds) {
-      list = list.filter((product) => productIds.includes(product.Id));
-    }
+  async init() {
+    const list = await this.dataSource.getData();
     this.renderList(list);
   }
 
