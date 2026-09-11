@@ -1,4 +1,4 @@
-import { getLocalStorage } from './utils.mjs';
+import { getLocalStorage, updateCartCount } from './utils.mjs';
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
@@ -25,4 +25,8 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
+// Display the products currently stored in the cart.
 renderCartContents();
+
+// Display the number of products beside the cart icon.
+updateCartCount();
