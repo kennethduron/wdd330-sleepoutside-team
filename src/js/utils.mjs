@@ -27,3 +27,26 @@ export function setClick(selector, callback) {
   });
   qs(selector).addEventListener("click", callback);
 }
+
+// Render a list of items using a supplied template function.
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = 'afterbegin',
+  clear = false,
+) {
+  // Clears the existing content if requested.
+  if (clear) {
+    parentElement.innerHTML = '';
+  }
+
+  // Converts each item in the list into an HTML string.
+  const htmlStrings = list.map(templateFn);
+
+  // Inserts the generated HTML into the parent element.
+  parentElement.insertAdjacentHTML(
+    position,
+    htmlStrings.join(''),
+  );
+}
