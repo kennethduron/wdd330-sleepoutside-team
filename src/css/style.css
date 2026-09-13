@@ -137,6 +137,33 @@ button:focus-visible {
   fill: gray;
 }
 
+/* Display the number of items currently stored in the shopping cart. */
+.cart-count {
+  position: absolute;
+  top: 5px;
+  right: -8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 24px;
+  height: 24px;
+  padding: 2px 6px;
+
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--dark-grey);
+
+  font-size: 0.9rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.cart-count[hidden] {
+  display: none;
+}
+
 /* End cart icon styles */
 
 .mission {
