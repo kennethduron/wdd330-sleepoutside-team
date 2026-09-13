@@ -160,6 +160,10 @@ button:focus-visible {
   line-height: 1;
 }
 
+.cart-count[hidden] {
+  display: none;
+}
+
 /* End cart icon styles */
 
 .mission {
