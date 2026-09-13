@@ -1,4 +1,8 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import {
+  setLocalStorage,
+  getLocalStorage,
+  updateCartCount,
+} from './utils.mjs';
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -11,25 +15,27 @@ export default class ProductDetails {
     this.product = await this.dataSource.findProductById(this.productId);
 
     if (!this.product) {
-      document.querySelector(".product-detail").textContent =
-        "Product not found.";
+      document.querySelector('.product-detail').textContent =
+        'Product not found.';
       return;
     }
 
     this.renderProductDetails();
     document
-      .getElementById("addToCart")
+      .getElementById('addToCart')
       .addEventListener("click", this.addProductToCart.bind(this));
   }
 
   addProductToCart() {
-    const cartItems = getLocalStorage("so-cart") || [];
+    const cartItems = getLocalStorage('so-cart') || [];
     cartItems.push(this.product);
-    setLocalStorage("so-cart", cartItems);
+    setLocalStorage('so-cart', cartItems);
+
+    updateCartCount();
   }
 
   renderProductDetails() {
-    const productDetail = document.querySelector(".product-detail");
+    const productDetail = document.querySelector('.product-detail');
     const price = Number(this.product.FinalPrice).toFixed(2);
 
     document.title = `Sleep Outside | ${this.product.Name}`;
@@ -49,7 +55,7 @@ export default class ProductDetails {
     productDetail.querySelector('[data-product="description"]').innerHTML =
       this.product.DescriptionHtmlSimple;
 
-    const addToCart = document.getElementById("addToCart");
+    const addToCart = document.getElementById('addToCart');
     addToCart.dataset.id = this.product.Id;
   }
 }
