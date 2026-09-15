@@ -1,5 +1,11 @@
-// Import the function that displays the number of items in the cart.
-import { updateCartCount } from './utils.mjs';
+import { updateCartCount } from "./utils.mjs";
+import ProductData from "./ProductData.mjs";
+import ProductList from "./ProductList.mjs";
 
-// Display the current cart item count in the header.
 updateCartCount();
+
+const dataSource = new ProductData("tents");
+const listElement = document.querySelector("#productList");
+const myList = new ProductList("tents", dataSource, listElement);
+
+myList.init();
