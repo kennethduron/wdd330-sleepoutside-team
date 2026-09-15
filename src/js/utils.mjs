@@ -56,3 +56,11 @@ export function updateCartCount() {
   // Hide the badge when the cart is empty.
   cartCount.hidden = cartItems.length === 0;
 }
+
+export function renderListWithTemplate(templateFn, parentElement, list, position = 'afterbegin', clear = false) {
+  if (clear) {
+    parentElement.innerHTML = '';
+  }
+  const htmlStrings = list.map(templateFn);
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
+}
