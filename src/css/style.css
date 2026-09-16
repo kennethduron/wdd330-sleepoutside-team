@@ -264,6 +264,24 @@ button:focus-visible {
   font-size: 1em;
 }
 
+.product-card__original-price {
+  color: var(--dark-grey);
+  font-size: var(--small-font);
+}
+
+.product-card__price {
+  font-weight: bold;
+}
+
+.product-card__discount {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--tertiary-color);
+  color: white;
+  font-size: var(--small-font);
+  font-weight: bold;
+}
+
 /* End product list card */
 
 .product-detail {
