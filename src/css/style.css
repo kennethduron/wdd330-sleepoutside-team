@@ -314,6 +314,14 @@ button:focus-visible {
   grid-column: 3;
 }
 
+@media screen and (max-width: 499px) {
+  .cart-card__quantity,
+  .cart-card__price {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
