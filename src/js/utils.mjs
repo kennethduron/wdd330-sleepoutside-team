@@ -25,6 +25,68 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener('click', callback);
 }
 
+export function renderWithTemplate(template, parentElement, data, callback) {
+  if (!parentElement) {
+    return;
+  }
+
+  parentElement.innerHTML = template;
+
+  if (callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const response = await fetch(path);
+
+  if (!response.ok) {
+    console.error(
+      `Failed to load template from ${path}: ${response.status} ${response.statusText}`,
+    );
+    throw new Error(`Template load failed for ${path}`);
+  }
+
+  return response.text();
+}
+
+export async function loadHeaderFooter() {
+  const renderTemplates = async () => {
+    try {
+      const [headerTemplate, footerTemplate] = await Promise.all([
+        loadTemplate('/partials/header.html'),
+        loadTemplate('/partials/footer.html'),
+      ]);
+
+      const headerElement = document.querySelector('#main-header');
+      const footerElement = document.querySelector('#main-footer');
+
+      if (headerElement) {
+        renderWithTemplate(headerTemplate, headerElement, null, updateCartCount);
+      } else {
+        console.warn('Header placeholder #main-header was not found.');
+      }
+
+      if (footerElement) {
+        renderWithTemplate(footerTemplate, footerElement);
+      } else {
+        console.warn('Footer placeholder #main-footer was not found.');
+      }
+    } catch (error) {
+      console.error('Unable to load header and footer partials.', error);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderTemplates, {
+      once: true,
+    });
+    return;
+  }
+
+  await renderTemplates();
+}
+
 // Update the cart icon with the number of products currently in the cart.
 export function updateCartCount() {
   // Retrieve the cart from localStorage.
