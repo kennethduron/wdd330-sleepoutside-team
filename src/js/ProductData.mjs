@@ -1,23 +1,33 @@
-function convertToJson(res) {
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Bad Response");
+const baseURL = import.meta.env.VITE_SERVER_URL;
+
+async function convertToJson(response) {
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}.`);
   }
+
+  return response.json();
 }
 
 export default class ProductData {
-  constructor(category) {
-    this.category = category;
-    this.path = `../json/${this.category}.json`;
+  getUrl(path) {
+    if (!baseURL) {
+      throw new Error('Product API URL is not configured.');
+    }
+
+    return `${baseURL}${path}`;
   }
-  getData() {
-    return fetch(this.path)
-      .then(convertToJson)
-      .then((data) => data);
+
+  async getData(category) {
+    const response = await fetch(this.getUrl(`products/search/${category}`));
+    const data = await convertToJson(response);
+
+    return data.Result;
   }
+
   async findProductById(id) {
-    const products = await this.getData();
-    return products.find((item) => item.Id === id);
+    const response = await fetch(this.getUrl(`product/${id}`));
+    const data = await convertToJson(response);
+
+    return data.Result;
   }
 }

@@ -25,6 +25,7 @@ export default defineConfig({
           'src/product_pages/northface-talus-4.html',
         ),
         productDynamic: resolve(__dirname, 'src/product_pages/index.html'),
+        productListing: resolve(__dirname, 'src/product_listing/index.html'),
       },
     },
   },
