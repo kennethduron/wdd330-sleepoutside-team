@@ -13,7 +13,7 @@ loadHeaderFooter();
 const productId = getParam('product');
 
 // Create the product data source.
-const dataSource = new ProductData('tents');
+const dataSource = new ProductData();
 
 // Create the product details object for the selected product.
 const product = new ProductDetails(productId, dataSource);

@@ -12,18 +12,24 @@ export default class ProductDetails {
   }
 
   async init() {
-    this.product = await this.dataSource.findProductById(this.productId);
+    const productDetail = document.querySelector('.product-detail');
 
-    if (!this.product) {
-      document.querySelector('.product-detail').textContent =
-        'Product not found.';
-      return;
+    try {
+      this.product = await this.dataSource.findProductById(this.productId);
+
+      if (!this.product) {
+        productDetail.textContent = 'Product not found.';
+        return;
+      }
+
+      this.renderProductDetails();
+      document
+        .getElementById('addToCart')
+        .addEventListener('click', this.addProductToCart.bind(this));
+    } catch (error) {
+      console.error('Unable to load product details.', error);
+      productDetail.textContent = 'Unable to load this product. Please try again.';
     }
-
-    this.renderProductDetails();
-    document
-      .getElementById('addToCart')
-      .addEventListener("click", this.addProductToCart.bind(this));
   }
 
   addProductToCart() {
@@ -40,18 +46,18 @@ export default class ProductDetails {
 
     document.title = `Sleep Outside | ${this.product.Name}`;
     productDetail.querySelector('[data-product="brand"]').textContent =
-      this.product.Brand.Name;
+      this.product.Brand?.Name || this.product.Brand || '';
     productDetail.querySelector('[data-product="name"]').textContent =
       this.product.NameWithoutBrand;
 
     const image = productDetail.querySelector('[data-product="image"]');
-    image.src = this.product.Image;
+    image.src = this.product.Images?.PrimaryLarge || this.product.Image;
     image.alt = this.product.Name;
 
     productDetail.querySelector('[data-product="price"]').textContent =
       `$${price}`;
     productDetail.querySelector('[data-product="color"]').textContent =
-      this.product.Colors[0].ColorName;
+      this.product.Colors?.[0]?.ColorName || '';
     productDetail.querySelector('[data-product="description"]').innerHTML =
       this.product.DescriptionHtmlSimple;
 
