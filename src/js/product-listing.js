@@ -30,7 +30,11 @@ async function init() {
   heading.textContent = `Top Products: ${categoryName}`;
 
   try {
-    const productList = new ProductList(category, new ProductData(), listElement);
+    const productList = new ProductList(
+      category,
+      new ProductData(),
+      listElement,
+    );
     const productCount = await productList.init();
 
     if (productCount === 0) {
