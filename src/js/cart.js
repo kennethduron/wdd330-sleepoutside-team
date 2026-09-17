@@ -2,33 +2,33 @@ import {
   getLocalStorage,
   setLocalStorage,
   loadHeaderFooter,
-} from "./utils.mjs";
+} from './utils.mjs';
 
 function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart") || [];
+  const cartItems = getLocalStorage('so-cart') || [];
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  document.querySelector('.product-list').innerHTML = htmlItems.join('');
   addRemoveListeners();
 }
 
 function removeItemFromCart(e) {
   const idToRemove = e.target.dataset.id;
-  const cartItems = getLocalStorage("so-cart") || [];
+  const cartItems = getLocalStorage('so-cart') || [];
   const updatedCart = cartItems.filter((item) => item.Id !== idToRemove);
-  setLocalStorage("so-cart", updatedCart);
+  setLocalStorage('so-cart', updatedCart);
   renderCartContents();
 }
 
 function addRemoveListeners() {
-  const removeButtons = document.querySelectorAll(".cart-card__remove");
+  const removeButtons = document.querySelectorAll('.cart-card__remove');
   removeButtons.forEach((button) => {
-    button.addEventListener("click", removeItemFromCart);
+    button.addEventListener('click', removeItemFromCart);
   });
 }
 
 function cartItemTemplate(item) {
   const image = item.Images?.PrimaryMedium || item.Image;
-  const color = item.Colors?.[0]?.ColorName || "";
+  const color = item.Colors?.[0]?.ColorName || '';
   const newItem = `<li class="cart-card divider">
   <a href="../product_pages/?product=${item.Id}" class="cart-card__image">
     <img
