@@ -2,21 +2,37 @@ import {
   getLocalStorage,
   setLocalStorage,
   loadHeaderFooter,
+  updateCartCount,
 } from './utils.mjs';
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector('.product-list').innerHTML = htmlItems.join('');
+  const cartList = document.querySelector('.product-list');
+
+  if (cartItems.length === 0) {
+    cartList.innerHTML = '<li class="cart-empty">Your cart is empty.</li>';
+    return;
+  }
+
+  const htmlItems = cartItems.map((item, index) =>
+    cartItemTemplate(item, index),
+  );
+  cartList.innerHTML = htmlItems.join('');
   addRemoveListeners();
 }
 
 function removeItemFromCart(e) {
-  const idToRemove = e.target.dataset.id;
+  const itemIndex = Number(e.currentTarget.dataset.index);
   const cartItems = getLocalStorage('so-cart') || [];
-  const updatedCart = cartItems.filter((item) => item.Id !== idToRemove);
-  setLocalStorage('so-cart', updatedCart);
+
+  if (!Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= cartItems.length) {
+    return;
+  }
+
+  cartItems.splice(itemIndex, 1);
+  setLocalStorage('so-cart', cartItems);
   renderCartContents();
+  updateCartCount();
 }
 
 function addRemoveListeners() {
@@ -26,7 +42,7 @@ function addRemoveListeners() {
   });
 }
 
-function cartItemTemplate(item) {
+function cartItemTemplate(item, index) {
   const image = item.Images?.PrimaryMedium || item.Image;
   const color = item.Colors?.[0]?.ColorName || '';
   const newItem = `<li class="cart-card divider">
@@ -42,7 +58,14 @@ function cartItemTemplate(item) {
   <p class="cart-card__color">${color}</p>
   <p class="cart-card__quantity">qty: 1</p>
   <p class="cart-card__price">$${item.FinalPrice}</p>
-  <span class="cart-card__remove" data-id="${item.Id}">X</span>
+  <button
+    type="button"
+    class="cart-card__remove"
+    data-index="${index}"
+    aria-label="Remove ${item.Name} from cart"
+  >
+    ×
+  </button>
 </li>`;
 
   return newItem;
