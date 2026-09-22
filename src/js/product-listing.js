@@ -1,4 +1,4 @@
-import ProductData from './ProductData.mjs';
+import ExternalServices from './ExternalServices.mjs';
 import ProductList from './ProductList.mjs';
 import { getParam, loadHeaderFooter } from './utils.mjs';
 
@@ -30,7 +30,8 @@ async function init() {
   heading.textContent = `Top Products: ${categoryName}`;
 
   try {
-    const productList = new ProductList(category, new ProductData(), listElement);
+    const externalServices = new ExternalServices();
+    const productList = new ProductList(category, externalServices, listElement);
     const productCount = await productList.init();
 
     if (productCount === 0) {
