@@ -8,17 +8,33 @@ import {
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
   const cartList = document.querySelector('.product-list');
+  const cartFooter = document.querySelector('.cart-footer');
 
   if (cartItems.length === 0) {
     cartList.innerHTML = '<li class="cart-empty">Your cart is empty.</li>';
+    cartFooter.classList.add('hide');
     return;
   }
+
+  cartFooter.classList.remove('hide');
+  updateCartTotal(cartItems);
 
   const htmlItems = cartItems.map((item, index) =>
     cartItemTemplate(item, index),
   );
   cartList.innerHTML = htmlItems.join('');
   addRemoveListeners();
+}
+
+function updateCartTotal(cartItems) {
+  const cartTotal = document.querySelector('.cart-total');
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + Number(item.FinalPrice),
+    0,
+  );
+
+  cartTotal.textContent = `Total: $${total.toFixed(2)}`;
 }
 
 function removeItemFromCart(e) {
