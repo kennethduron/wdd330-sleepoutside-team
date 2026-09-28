@@ -8,7 +8,7 @@ async function convertToJson(response) {
   return response.json();
 }
 
-export default class ProductData {
+export default class ExternalServices {
   getUrl(path) {
     if (!baseURL) {
       throw new Error('Product API URL is not configured.');
@@ -29,5 +29,19 @@ export default class ProductData {
     const data = await convertToJson(response);
 
     return data.Result;
+  }
+
+  async checkout(payload) {
+  const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    const response = await fetch(this.getUrl('checkout'), options);
+
+    return convertToJson(response);
   }
 }
