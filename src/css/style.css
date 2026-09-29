@@ -326,6 +326,26 @@ button:focus-visible {
   width: 100%;
 }
 
+.product-detail__original-price {
+  display: block;
+  color: var(--dark-grey);
+  font-size: var(--small-font);
+  font-weight: normal;
+}
+
+.product-detail__price {
+  margin-right: 0.5rem;
+}
+
+.product-detail__discount {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--tertiary-color);
+  color: white;
+  font-size: var(--small-font);
+  font-weight: bold;
+}
+
 /* Start cart list card styles */
 .cart-card {
   display: grid;

@@ -42,7 +42,16 @@ export default class ProductDetails {
 
   renderProductDetails() {
     const productDetail = document.querySelector('.product-detail');
-    const price = Number(this.product.FinalPrice).toFixed(2);
+
+    const finalPrice = Number(this.product.FinalPrice);
+    const suggestedRetailPrice = Number(this.product.SuggestedRetailPrice);
+    const price = finalPrice.toFixed(2);
+
+    const hasDiscount =
+      Number.isFinite(finalPrice) &&
+      Number.isFinite(suggestedRetailPrice) &&
+      suggestedRetailPrice > 0 &&
+      finalPrice < suggestedRetailPrice;
 
     document.title = `Sleep Outside | ${this.product.Name}`;
     productDetail.querySelector('[data-product="brand"]').textContent =
@@ -54,8 +63,24 @@ export default class ProductDetails {
     image.src = this.product.Images?.PrimaryLarge || this.product.Image;
     image.alt = this.product.Name;
 
-    productDetail.querySelector('[data-product="price"]').textContent =
-      `$${price}`;
+    const priceElement = productDetail.querySelector('[data-product="price"]');
+
+    if (hasDiscount) {
+      const discountPercentage = Math.round(
+        ((suggestedRetailPrice - finalPrice) / suggestedRetailPrice) * 100,
+      );
+
+      priceElement.innerHTML = `
+          <span class="product-detail__original-price">
+            Was <del>$${suggestedRetailPrice.toFixed(2)}</del>
+          </span>
+          <span class="product-detail__price">$${price}</span>
+          <span class="product-detail__discount">${discountPercentage}% OFF</span>
+        `;
+      } else {
+        priceElement.textContent = `$${price}`;
+      }
+
     productDetail.querySelector('[data-product="color"]').textContent =
       this.product.Colors?.[0]?.ColorName || '';
     productDetail.querySelector('[data-product="description"]').innerHTML =
