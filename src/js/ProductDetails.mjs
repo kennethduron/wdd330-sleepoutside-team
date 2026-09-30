@@ -1,8 +1,5 @@
-import {
-  setLocalStorage,
-  getLocalStorage,
-  updateCartCount,
-} from './utils.mjs';
+import { setLocalStorage, getLocalStorage, updateCartCount } from './utils.mjs';
+import { setupWishlistButton } from './wishlist.mjs'; // NEW
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -26,9 +23,11 @@ export default class ProductDetails {
       document
         .getElementById('addToCart')
         .addEventListener('click', this.addProductToCart.bind(this));
+      this.addWishlistButton(); // NEW
     } catch (error) {
       console.error('Unable to load product details.', error);
-      productDetail.textContent = 'Unable to load this product. Please try again.';
+      productDetail.textContent =
+        'Unable to load this product. Please try again.';
     }
   }
 
@@ -38,6 +37,17 @@ export default class ProductDetails {
     setLocalStorage('so-cart', cartItems);
 
     updateCartCount();
+  }
+
+  // NEW: creates the wish list button right after the Add to Cart button
+  addWishlistButton() {
+    const addToCart = document.getElementById('addToCart');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'wishlistBtn';
+    button.className = 'wishlist-btn';
+    addToCart.insertAdjacentElement('afterend', button);
+    setupWishlistButton(button, this.product);
   }
 
   renderProductDetails() {

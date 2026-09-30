@@ -27,6 +27,7 @@ export default defineConfig({
         ),
         productDynamic: resolve(__dirname, 'src/product_pages/index.html'),
         productListing: resolve(__dirname, 'src/product_listing/index.html'),
+        wishlist: resolve(__dirname, 'src/wishlist/index.html'),
       },
     },
   },
