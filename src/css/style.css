@@ -472,6 +472,34 @@ button:focus-visible {
   font-weight: bold;
   font-size: var(--large-font);
 }
+
+.alert-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-left: 0.4rem solid var(--tertiary-color);
+  background-color: var(--light-grey);
+  color: var(--dark-grey);
+}
+
+.alert-message p {
+  margin: 0;
+}
+
+.alert-message__dismiss {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.checkout-success {
+  max-width: 640px;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+}
 /* End checkout styles */
 
 @media screen and (max-width: 499px) {
