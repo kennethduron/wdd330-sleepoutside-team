@@ -29,6 +29,7 @@ export default class ProductList {
     this.category = category;
     this.dataSource = dataSource;
     this.listElement = listElement;
+    this.products = [];
   }
 
   async init() {
@@ -38,8 +39,31 @@ export default class ProductList {
       throw new Error('The product list response was invalid.');
     }
 
-    this.renderList(products);
+    this.products = products;
+    this.renderList(this.products);
     return products.length;
+  }
+
+  search(query) {
+    const normalizedQuery = String(query || '').trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return this.products;
+    }
+
+    return this.products.filter((product) => {
+      const searchableFields = [
+        product.Name,
+        product.NameWithoutBrand,
+        getBrandName(product),
+        product.DescriptionHtmlSimple,
+        this.category,
+      ];
+
+      return searchableFields.some((field) =>
+        String(field || '').toLowerCase().includes(normalizedQuery),
+      );
+    });
   }
 
   renderList(products) {
