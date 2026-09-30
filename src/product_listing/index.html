@@ -13,6 +13,20 @@
     <main class="divider">
       <section class="products" aria-labelledby="product-listing-title">
         <h1 id="product-listing-title">Top Products</h1>
+        <form id="product-search-form" class="product-search" role="search">
+          <label for="product-search-input">Search products</label>
+          <div class="product-search__controls">
+            <input
+              id="product-search-input"
+              name="product-search"
+              type="search"
+              placeholder="Search products..."
+              autocomplete="off"
+            />
+            <button type="submit">Search</button>
+            <button id="clear-product-search" type="button">Clear</button>
+          </div>
+        </form>
         <p id="product-listing-message" role="status" hidden></p>
         <ul class="product-list" aria-live="polite"></ul>
       </section>

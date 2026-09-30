@@ -221,6 +221,42 @@ button:focus-visible {
   padding: 1rem;
 }
 
+.product-search {
+  max-width: 680px;
+  margin: 1rem auto;
+}
+
+.product-search label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.product-search__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.product-search input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 0.65rem;
+  border: 1px solid var(--light-grey);
+  font: inherit;
+}
+
+.product-search input:focus {
+  outline: 2px solid var(--tertiary-color);
+  outline-offset: 2px;
+}
+
+.product-search button {
+  margin: 0;
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+}
+
 .product-list {
   display: flex;
   flex-flow: row wrap;

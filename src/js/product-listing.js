@@ -15,6 +15,44 @@ function showMessage(message) {
   messageElement.hidden = false;
 }
 
+function hideMessage() {
+  const messageElement = document.querySelector('#product-listing-message');
+  messageElement.textContent = '';
+  messageElement.hidden = true;
+}
+
+function setupProductSearch(productList) {
+  const form = document.querySelector('#product-search-form');
+  const input = document.querySelector('#product-search-input');
+  const clearButton = document.querySelector('#clear-product-search');
+
+  function updateResults() {
+    const query = input.value.trim();
+    const results = productList.search(query);
+
+    productList.renderList(results);
+
+    if (query && results.length === 0) {
+      showMessage(`No products found for "${query}".`);
+    } else {
+      hideMessage();
+    }
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    updateResults();
+  });
+
+  input.addEventListener('input', updateResults);
+
+  clearButton.addEventListener('click', () => {
+    input.value = '';
+    updateResults();
+    input.focus();
+  });
+}
+
 async function init() {
   const category = getParam('category')?.toLowerCase();
   const categoryName = categories[category];
@@ -36,7 +74,10 @@ async function init() {
 
     if (productCount === 0) {
       showMessage(`No ${categoryName.toLowerCase()} are currently available.`);
+      return;
     }
+
+    setupProductSearch(productList);
   } catch (error) {
     showMessage('Unable to load products. Please try again later.');
   }
