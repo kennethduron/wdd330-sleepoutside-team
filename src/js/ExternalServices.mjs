@@ -3,11 +3,26 @@ const baseURL =
   'https://wdd330-backend-osp8.onrender.com/';
 
 async function convertToJson(response) {
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}.`);
+  const responseText = await response.text();
+  let responseBody = null;
+
+  if (responseText) {
+    try {
+      responseBody = JSON.parse(responseText);
+    } catch {
+      responseBody = responseText;
+    }
   }
 
-  return response.json();
+  if (!response.ok) {
+    throw {
+      name: 'servicesError',
+      message: responseBody || `Request failed with status ${response.status}.`,
+      status: response.status,
+    };
+  }
+
+  return responseBody;
 }
 
 export default class ExternalServices {

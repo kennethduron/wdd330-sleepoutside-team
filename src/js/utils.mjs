@@ -11,6 +11,35 @@ export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+export function alertMessage(message, scroll = true) {
+  const main = document.querySelector('main');
+
+  if (!main) {
+    return;
+  }
+
+  const alert = document.createElement('section');
+  alert.className = 'alert-message';
+  alert.setAttribute('role', 'alert');
+
+  const text = document.createElement('p');
+  text.textContent = message;
+
+  const dismissButton = document.createElement('button');
+  dismissButton.type = 'button';
+  dismissButton.className = 'alert-message__dismiss';
+  dismissButton.textContent = 'Dismiss';
+  dismissButton.setAttribute('aria-label', 'Dismiss error message');
+  dismissButton.addEventListener('click', () => alert.remove());
+
+  alert.append(text, dismissButton);
+  main.prepend(alert);
+
+  if (scroll) {
+    alert.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);

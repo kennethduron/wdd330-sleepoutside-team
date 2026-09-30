@@ -1,5 +1,10 @@
 import ExternalServices from './ExternalServices.mjs';
-import { getLocalStorage } from './utils.mjs';
+import {
+  alertMessage,
+  getLocalStorage,
+  setLocalStorage,
+  updateCartCount,
+} from './utils.mjs';
 
 function getQuantity(item) {
   const quantity = Number(item.quantity ?? item.Quantity ?? 1);
@@ -24,6 +29,34 @@ function formDataToJSON(formElement) {
   });
 
   return convertedJSON;
+}
+
+function getErrorMessage(error) {
+  const message = error?.message ?? error;
+
+  if (Array.isArray(message)) {
+    return message.map(getErrorMessage).join(' ');
+  }
+
+  if (message && typeof message === 'object') {
+    const detail = message.message || message.error || message.Message;
+
+    if (detail) {
+      return getErrorMessage(detail);
+    }
+
+    const nestedMessages = Object.values(message)
+      .map(getErrorMessage)
+      .filter(Boolean);
+
+    if (nestedMessages.length > 0) {
+      return nestedMessages.join(' ');
+    }
+
+    return 'Unable to submit your order. Please review your information and try again.';
+  }
+
+  return String(message || 'Unable to submit your order. Please try again.');
 }
 
 export default class CheckoutProcess {
@@ -97,6 +130,21 @@ export default class CheckoutProcess {
     order.shipping = this.shipping;
     order.tax = this.tax.toFixed(2);
 
-    return this.services.checkout(order);
+    try {
+      const response = await this.services.checkout(order);
+
+      setLocalStorage(this.key, []);
+      updateCartCount();
+      window.location.assign('/checkout/success.html');
+
+      return response;
+    } catch (error) {
+      this.lastError = error;
+      alertMessage(getErrorMessage(error), false);
+      // Keep the structured backend response available for diagnosis.
+      // eslint-disable-next-line no-console
+      console.error('Checkout submission failed.', error);
+      return null;
+    }
   }
 }

@@ -25,14 +25,5 @@ checkoutForm.addEventListener('submit', async (event) => {
 
   checkoutProcess.calculateOrderTotal();
 
-  try {
-    const response = await checkoutProcess.checkout(checkoutForm);
-    // The Week 04 activity requires the checkout response to be inspectable.
-    // eslint-disable-next-line no-console
-    console.info('Checkout response received.', response);
-  } catch (error) {
-    // Keep backend failures inspectable until the next activity adds checkout UX.
-    // eslint-disable-next-line no-console
-    console.error('Checkout submission failed.', error);
-  }
+  await checkoutProcess.checkout(checkoutForm);
 });
