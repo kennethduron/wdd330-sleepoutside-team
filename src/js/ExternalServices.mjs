@@ -1,4 +1,6 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+const baseURL =
+  import.meta.env.VITE_SERVER_URL ||
+  'https://wdd330-backend-osp8.onrender.com/';
 
 async function convertToJson(response) {
   if (!response.ok) {
@@ -32,7 +34,7 @@ export default class ExternalServices {
   }
 
   async checkout(payload) {
-  const options = {
+    const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,13 +1,29 @@
 import ExternalServices from './ExternalServices.mjs';
 import { getLocalStorage } from './utils.mjs';
 
+function getQuantity(item) {
+  const quantity = Number(item.quantity ?? item.Quantity ?? 1);
+  return Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
+}
+
 function packageItems(items) {
   return items.map((item) => ({
     id: item.Id,
     name: item.Name,
     price: item.FinalPrice,
-    quantity: 1,
+    quantity: getQuantity(item),
   }));
+}
+
+function formDataToJSON(formElement) {
+  const formData = new FormData(formElement);
+  const convertedJSON = {};
+
+  formData.forEach((value, key) => {
+    convertedJSON[key] = value;
+  });
+
+  return convertedJSON;
 }
 
 export default class CheckoutProcess {
@@ -29,7 +45,7 @@ export default class CheckoutProcess {
 
   calculateItemSubTotal() {
     this.itemTotal = this.list.reduce(
-      (total, item) => total + Number(item.FinalPrice),
+      (total, item) => total + Number(item.FinalPrice) * getQuantity(item),
       0,
     );
 
@@ -42,9 +58,13 @@ export default class CheckoutProcess {
 
   calculateOrderTotal() {
     this.tax = this.itemTotal * 0.06;
+    const itemCount = this.list.reduce(
+      (total, item) => total + getQuantity(item),
+      0,
+    );
 
-    if (this.list.length > 0) {
-      this.shipping = 10 + (this.list.length - 1) * 2;
+    if (itemCount > 0) {
+      this.shipping = 10 + (itemCount - 1) * 2;
     } else {
       this.shipping = 0;
     }
@@ -69,12 +89,7 @@ export default class CheckoutProcess {
   }
 
   async checkout(form) {
-    const formData = new FormData(form);
-    const order = {};
-
-    formData.forEach((value, key) => {
-      order[key] = value;
-    });
+    const order = formDataToJSON(form);
 
     order.orderDate = new Date().toISOString();
     order.items = packageItems(this.list);
